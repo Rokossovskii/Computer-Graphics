@@ -1,14 +1,16 @@
-from operator import imod
-from random import random, seed
+#!/usr/bin/env python3
 import sys
-from lab1 import * 
 from glfw.GLFW import *
-from OpenGL.GL import *
 
+from lab2 import *
+from OpenGL.GL import *
+from OpenGL.GLU import *
 
 def startup():
     update_viewport(None, 400, 400)
-    glClearColor(0.5, 0.5, 0.5, 1.0)
+    glClearColor(0.0, 0.0, 0.0, 1.0)
+    glEnable(GL_DEPTH_TEST)
+
 
 def shutdown():
     pass
@@ -25,17 +27,17 @@ def update_viewport(window, width, height):
     glLoadIdentity()
 
     if width <= height:
-        glOrtho(-100.0, 100.0, -100.0 / aspect_ratio, 100.0 / aspect_ratio,
-                1.0, -1.0)
+        pass
+        glOrtho(-7.5, 7.5, -7.5 / aspect_ratio, 7.5 / aspect_ratio, 7.5, -7.5)
     else:
-        glOrtho(-100.0 * aspect_ratio, 100.0 * aspect_ratio, -100.0, 100.0,
-                1.0, -1.0)
+        pass
+        glOrtho(-7.5 * aspect_ratio, 7.5 * aspect_ratio, -7.5, 7.5, 7.5, -7.5)
 
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
 
-def main(shape, *rest):
+def main(shape,*rest):
     if not glfwInit():
         sys.exit(-1)
 
@@ -50,18 +52,15 @@ def main(shape, *rest):
 
     startup()
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime(),shape, rest)
+        render(glfwGetTime(),shape,*rest)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
 
     glfwTerminate()
 
+
 if __name__ == '__main__':
-    main(sierpinski_triangle,[-100.0, -20.0],[0, 80.0],[100.0, -20.0],6)
-    main(sierpinski_carpet)
-    main(deform_square,random())
-    main(deform_square,0.0)
-    main(square)
-    main(reinbow_triangle,[-50.0, 0.0],[0.0, 50.0],[50.0, 0.0])
-    
+    main(pointed_egg,20)
+    main(connected_egg,20)
+    main(triangled_egg,20)

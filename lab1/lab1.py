@@ -32,6 +32,7 @@ def inverted_background_triangle(a,b,c,depth):
         inverted_background_triangle(a,m_ab,m_ac,depth-1)
         inverted_background_triangle(b,m_bc,m_ab,depth-1)
         inverted_background_triangle(c,m_ac,m_bc,depth-1)
+    
         
 def square(
     x: int = -50,
