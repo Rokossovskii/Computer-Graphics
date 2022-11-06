@@ -8,9 +8,9 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 def spin(angle):
-    #glRotatef(angle,1.0,0.0,0.0)
+    glRotatef(angle,1.0,0.0,0.0)
     glRotatef(angle,0.0,1.0,0.0)
-    #glRotatef(angle,0.0,0.0,1.0)
+    glRotatef(angle,0.0,0.0,1.0)
 
 def axes():
     glBegin(GL_LINES)
@@ -39,30 +39,69 @@ def pointed_egg(egg_matrix):
             glEnd()
 
 def connected_egg(egg_matrix):
-    for index_i,row in enumerate(egg_matrix):
-        length = len(row)       
+    for index_i,row in enumerate(egg_matrix[1:]):      
         
-        for index_j,vertex in enumerate(row):
+        for index_j,vertex in enumerate(row[1:]):
             glColor3d(255/255, 255/255, 204/255)
 
             glBegin(GL_LINE_LOOP)
             glVertex3f(*vertex)
-            glVertex3f(*egg_matrix[index_i,(index_j+1)%length,:])
-            glVertex3f(*egg_matrix[(index_i+1)%length,index_j,:])
+            glVertex3f(*egg_matrix[index_i+1,(index_j),:])
+            glVertex3f(*egg_matrix[(index_i),index_j+1,:])
             glEnd()
         
 def triangled_egg(egg_matrix):
-    for index_i,row in enumerate(egg_matrix):
-        length = len(row)       
+    for index_i,row in enumerate(egg_matrix[1:]):    
         
-        for index_j,vertex in enumerate(row):
-            glColor3d(255/255, 255/255, 204/255)
+        for index_j,vertex in enumerate(row[1:]):
+            glColor3d(0/255, 0/255, 0/255)
 
             glBegin(GL_POLYGON)
             glVertex3f(*vertex)
-            glVertex3f(*egg_matrix[index_i,(index_j+1)%length,:])
-            glVertex3f(*egg_matrix[(index_i+1)%length,index_j,:])
+            glVertex3f(*egg_matrix[index_i+1,(index_j),:])
+            glVertex3f(*egg_matrix[(index_i),index_j+1,:])
             glEnd()
+
+    for index_i,row in enumerate(egg_matrix[:-1]):    
+        
+        for index_j,vertex in enumerate(row[:-1]):
+            glColor3d(251/255, 95/255, 252/255)
+
+            glBegin(GL_POLYGON)
+            glVertex3f(*vertex)
+            glVertex3f(*egg_matrix[index_i+1,(index_j),:])
+            glVertex3f(*egg_matrix[(index_i),index_j+1,:])
+            glEnd()
+
+def triangle_strip_egg_vertical(egg_matrix):
+    matrix_len = len(egg_matrix)
+    for index_i in range(1,matrix_len):    
+        glColor3d(index_i/matrix_len, index_i/matrix_len, index_i/matrix_len)
+        glBegin(GL_TRIANGLE_STRIP)
+        glVertex3f(*egg_matrix[index_i,1,:])
+        for index_j in range(1,matrix_len):
+            
+            glVertex3f(*egg_matrix[index_i-1,index_j,:])
+            glVertex3f(*egg_matrix[index_i,index_j-1,:])
+        glEnd()
+
+def triangle_strip_egg_horizontal(egg_matrix):
+    matrix_len = len(egg_matrix)
+    for index_i in range(matrix_len-1):    
+        
+        glColor3d(index_i/matrix_len, index_i/matrix_len, index_i/matrix_len)
+        glBegin(GL_TRIANGLE_STRIP)
+        glVertex3f(*egg_matrix[0,index_i,:])
+        for index_j in range(matrix_len-1):
+            
+            glVertex3f(*egg_matrix[index_j,index_i+1,:])
+            glVertex3f(*egg_matrix[index_j+1,index_i,:])
+        glVertex3f(*egg_matrix[index_j+1,index_i+1,:])
+        glEnd()
+
+def sierpinski_piramid(depth):
+
+    pass
 
 def egg(n):
     

@@ -61,6 +61,11 @@ def main(shape,*rest):
 
 
 if __name__ == '__main__':
-    main(pointed_egg,20)
-    main(connected_egg,20)
+    main(triangle_strip_egg_horizontal,20)
+    main(triangle_strip_egg_vertical,20)
     main(triangled_egg,20)
+    main(connected_egg,20)
+    main(pointed_egg,20)
+    
+    
+    
