@@ -61,6 +61,7 @@ def main(shape,*rest):
 
 
 if __name__ == '__main__':
+    main(sierpinski_piramid,2,5,5,[0,0,5])
     main(triangle_strip_egg_horizontal,20)
     main(triangle_strip_egg_vertical,20)
     main(triangled_egg,20)

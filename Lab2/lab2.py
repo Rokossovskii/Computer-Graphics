@@ -99,9 +99,34 @@ def triangle_strip_egg_horizontal(egg_matrix):
         glVertex3f(*egg_matrix[index_j+1,index_i+1,:])
         glEnd()
 
-def sierpinski_piramid(depth):
+def sierpinski_piramid(depth,height,edge_len,vertex):
+    if depth > 0:
+        for ver in calculate_posision_of_vertices(height,edge_len,vertex):
+            sierpinski_piramid(depth -1,height-0.5,edge_len-0.5,ver)
+    else:
+        draw_piraid(calculate_posision_of_vertices(height,edge_len,vertex))
+    
 
-    pass
+def calculate_posision_of_vertices(height,bottom_edge_len,start_vertex):
+    verticies_arr = [start_vertex]
+    for alpha in [45,135,225]:
+        verticies_arr.append([start_vertex[0]+math.sin(math.radians(alpha))*(math.sqrt(2)/2)*bottom_edge_len,
+                              start_vertex[1]+math.cos(math.radians(alpha))*(math.sqrt(2)/2)*bottom_edge_len,
+                              start_vertex[2]-height])
+    verticies_arr.append(start_vertex)
+    for alpha in [225,315,45]:
+        verticies_arr.append([start_vertex[0]+math.sin(math.radians(alpha))*(math.sqrt(2)/2)*bottom_edge_len,
+                              start_vertex[1]+math.cos(math.radians(alpha))*(math.sqrt(2)/2)*bottom_edge_len,
+                              start_vertex[2]-height])
+    verticies_arr.append(start_vertex)
+    return verticies_arr
+
+def draw_piraid(ver_arr):
+    glColor3d(255/255, 255/255, 150/255)
+    glBegin(GL_TRIANGLE_STRIP)
+    for vertex in ver_arr:
+        glVertex3f(*vertex)
+    glEnd()
 
 def egg(n):
     
@@ -128,5 +153,13 @@ def render(time,shape,n):
 
     glFlush()
 
+def render(time,shape,n,height,edge_len,vertex):
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
 
+    spin(time*180/math.pi)
+    shape(n,height,edge_len,vertex)
 
+    axes()
+
+    glFlush()
