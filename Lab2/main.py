@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import random
 from glfw.GLFW import *
 
 from lab2 import *
@@ -37,7 +38,7 @@ def update_viewport(window, width, height):
     glLoadIdentity()
 
 
-def main(shape,*rest):
+def main(r,shape,*rest):
     if not glfwInit():
         sys.exit(-1)
 
@@ -50,9 +51,10 @@ def main(shape,*rest):
     glfwSetFramebufferSizeCallback(window, update_viewport)
     glfwSwapInterval(1)
 
+    random.seed(34)
     startup()
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime(),shape,*rest)
+        r(glfwGetTime(),shape,*rest)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
@@ -61,12 +63,12 @@ def main(shape,*rest):
 
 
 if __name__ == '__main__':
-    main(sierpinski_piramid,2,5,5,[0,0,5])
-    main(triangle_strip_egg_horizontal,20)
-    main(triangle_strip_egg_vertical,20)
-    main(triangled_egg,20)
-    main(connected_egg,20)
-    main(pointed_egg,20)
+    main(render2,sierpinski_piramid,2,5,5,[0,0,5])
+    main(render,triangle_strip_egg_horizontal,20)
+    main(render,triangle_strip_egg_vertical,20)
+    main(render,triangled_egg,20)
+    main(render,connected_egg,20)
+    main(render,pointed_egg,20)
     
     
     

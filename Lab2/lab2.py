@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import sys
-
+import random
 from glfw.GLFW import *
 
 from OpenGL.GL import *
@@ -153,7 +153,7 @@ def render(time,shape,n):
 
     glFlush()
 
-def render(time,shape,n,height,edge_len,vertex):
+def render2(time,shape,n,height,edge_len,vertex):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
