@@ -35,7 +35,7 @@ def update_viewport(window, width, height):
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-def main():
+def main(which_render):
     if not glfwInit():
         sys.exit(-1)
 
@@ -53,7 +53,7 @@ def main():
 
     startup()
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime())
+        which_render(glfwGetTime())
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
@@ -62,4 +62,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(render)

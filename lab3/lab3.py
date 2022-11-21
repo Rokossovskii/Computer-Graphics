@@ -1,12 +1,12 @@
 import sys
-
+import math
 from glfw.GLFW import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
 viewer = [0.0, 0.0, 10.0]
-
+obj = [0.0,0.0,0.0]
 theta = 0.0
 phi = 0.0
 scale = 1.0
@@ -14,6 +14,7 @@ pix2angle = 1.0
 
 left_mouse_button_pressed = 0
 ringt_mouse_button_pressed = 0
+enter_pressed = True
 mouse_x_pos_old = 0
 mouse_y_pos_old = 0
 delta_x = 0
@@ -71,8 +72,12 @@ def example_object():
     gluDeleteQuadric(quadric)
 
 def keyboard_key_callback(window, key, scancode, action, mods):
+    global enter_pressed
     if key == GLFW_KEY_ESCAPE and action == GLFW_PRESS:
         glfwSetWindowShouldClose(window, GLFW_TRUE)
+    if key == GLFW_KEY_ENTER and action == GLFW_PRESS:
+        enter_pressed = not enter_pressed
+    
 
 
 def mouse_motion_callback(window, x_pos, y_pos):
@@ -94,6 +99,8 @@ def mouse_motion_callback(window, x_pos, y_pos):
 
 def mouse_button_callback(window, button, action, mods):
     global left_mouse_button_pressed
+    global ringt_mouse_button_pressed
+    global enter_pressed
 
     if button == GLFW_MOUSE_BUTTON_LEFT and action == GLFW_PRESS:
         left_mouse_button_pressed = 1
@@ -105,8 +112,13 @@ def mouse_button_callback(window, button, action, mods):
     else:
         ringt_mouse_button_pressed = 0
 
-
 def render(time):
+    if enter_pressed:
+        render_move_object(time)
+    else:
+        render_move_camera(time)
+
+def render_move_object(time):
     global theta
     global phi
     global scale
@@ -122,11 +134,44 @@ def render(time):
         phi += delta_y * pix2angle
     
     if ringt_mouse_button_pressed:
-        scale += delta_y *pix2angle
+        scale += delta_y * pix2angle /100
 
     glRotatef(theta, 0.0, 1.0, 0.0)
     glRotatef(phi, 1.0, 0.0, 0.0)
     glScalef(scale,scale,scale)
+
+    axes()
+    example_object()
+
+    glFlush()
+
+def render_move_camera(time):
+    global theta
+    global phi
+    global scale
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+
+    gluLookAt(viewer[0], viewer[1], viewer[2],
+              0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+
+    if left_mouse_button_pressed:
+        theta += delta_x * pix2angle
+        phi += delta_y * pix2angle
+    
+    if ringt_mouse_button_pressed:
+        scale += delta_y * pix2angle /10
+        if(scale<0.1): scale = 0.1
+        if(scale>20): scale = 20
+
+    thta, ph = (theta*math.pi/180)%(math.pi*2), (phi*math.pi/180)%(math.pi*2)
+    if(math.cos(ph) < 0):
+        upY = 1
+    else:
+        upY = -1
+    
+    gluLookAt(scale*math.sin(thta)*math.cos(ph),scale*math.sin(ph),scale*math.cos(thta)*math.cos(ph), *obj, 0.0, upY, 0.0)
 
     axes()
     example_object()
